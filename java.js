@@ -4,6 +4,9 @@ let operator = '';
 let previousValue = '';
 let currentValue = '';
 let results = '';
+let previousOperator = '';
+let currentOperator = '';
+
 
 //querySelectors
 let clear = document.querySelector('#clear');
@@ -22,8 +25,7 @@ numbers.forEach((number) => number.addEventListener('click', function(e){
 
 operators.forEach((op) => op.addEventListener('click', function(e){
     handleOperator(e.target.textContent)
-    previousScreen.textContent = previousValue + ' ' + operator;
-    currentScreen.textContent = currentValue;
+    
 }));
 
 //eventListeners
@@ -45,6 +47,7 @@ equal.addEventListener('click', function(){
     }else {
         currentScreen.textContent = results.slice(0,5) + '...'
     }}
+    currentValue = results;
 
 })
 
@@ -52,17 +55,35 @@ equal.addEventListener('click', function(){
 
 function handleNumber(num){
     if(currentValue.length <= 5){
-    currentValue += num;}
+        if(num === '.' && currentValue.includes('.'))return //Esto no entiendo como no deja q uno escriba mas puntos....
+    currentValue += num;};
+    
 }
 
 function handleOperator(op){
-    operator = op;
-    if( results === ''){
-        previousValue = currentValue;
-        currentValue = '';
-    }else previousValue = results;
-    currentValue = '';
+    if (currentValue !== '') {
+        if (previousValue === '' && operator === '') {
+            // No previous value or operator, set current value as previous value
+            previousValue = currentValue;
+            currentValue = '';
+        } else if (previousValue !== '' && operator !== '') {
+            // Previous value and operator present, calculate the result
+            calculate();
+            previousValue = results.toString();
+            currentValue = '';
+        }
+        // Update the operator and display
+        operator = op;
+        previousScreen.textContent = previousValue + ' ' + operator;
+        currentScreen.textContent = currentValue;
+    } else if (previousValue !== '' && operator !== '') {
+        // If the user clicks an operator without entering a new number
+        // Update the operator and display
+        operator = op;
+        previousScreen.textContent = previousValue + ' ' + operator;
+    }
 }
+
 
 function calculate (){
     previousValue = Number(previousValue);

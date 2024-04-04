@@ -3,6 +3,7 @@
 let operator = '';
 let previousValue = '';
 let currentValue = '';
+let results = '';
 
 //querySelectors
 let clear = document.querySelector('#clear');
@@ -13,7 +14,7 @@ let previousScreen = document.querySelector('.previous')
 let currentScreen = document.querySelector('.current')
 let operators = document.querySelectorAll('.operator')
 
-//forEach ection
+//forEach section
 numbers.forEach((number) => number.addEventListener('click', function(e){
     handleNumber(e.target.textContent)
     currentScreen.textContent = currentValue;
@@ -30,6 +31,7 @@ clear.addEventListener('click', function (){
     previousValue = '';
     currentValue = '';
     operator = '';
+    results = '';
     previousScreen.textContent = currentValue;
     currentScreen.textContent = currentValue;
 })
@@ -38,16 +40,12 @@ equal.addEventListener('click', function(){
     if(currentValue != '' && previousValue != ''){
     calculate()
     previousScreen.textContent = '';
-    if(previousValue.length <=5){
-    currentScreen.textContent = previousValue;
+    if(results.length <=5){
+    currentScreen.textContent = results;
     }else {
-        currentScreen.textContent = previousValue.slice(0,5) + '...'
+        currentScreen.textContent = results.slice(0,5) + '...'
     }}
 
-})
-
-decimal.addEventListener('click', function(){
-    addDecimal()
 })
 
 //function section
@@ -59,26 +57,31 @@ function handleNumber(num){
 
 function handleOperator(op){
     operator = op;
-    previousValue = currentValue;
+    if( results === ''){
+        previousValue = currentValue;
+        currentValue = '';
+    }else previousValue = results;
     currentValue = '';
 }
 
 function calculate (){
     previousValue = Number(previousValue);
     currentValue = Number(currentValue);
+    results = Number(results)
    
     if(operator === '+'){
-        previousValue += currentValue;
+       results = previousValue + currentValue;
     }else if(operator === '-'){
-        previousValue -= currentValue;
+        results = previousValue - currentValue;
     }else if (operator === 'x'){
-        previousValue *= currentValue;
+        results =  previousValue * currentValue;
     }else {
-        previousValue /= currentValue;
+        results = previousValue / currentValue;
     }
-    previousValue = roundNumber(previousValue);
+    results = roundNumber(results);
     previousValue = previousValue.toString();
     currentValue = currentValue.toString();
+    results = results.toString()
 }
 
 

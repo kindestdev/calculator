@@ -31,7 +31,7 @@ h1{
     height: 60px;
     border-radius: 10px;
     color: white;
-    border: white solid;
+    border: rgba(255, 255, 255, 0.253) solid;
     justify-content: center;
     align-items: flex-end;
 
